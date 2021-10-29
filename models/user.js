@@ -29,18 +29,20 @@ const UserSchema = Schema({
     google: {
         type: Boolean,
         default: false
-    }
-    
+    },
 });
 
 /**
  * Eso se usa para modificar lo que hacen los metodos de mongoose.
+ * En este caso en particular, modifica el formato JSON en el que se imprimen
+ * los usuarios.
  * Es importante usar function() en lugar de () => para poder
  * usar el operador 'this', dado que es necesario poderlo usar para
  * el UserSchema
  */
 UserSchema.methods.toJSON = function() {
-    const { __v, password, ...restUser } = this.toObject();
+    const { __v, password, _id, ...restUser } = this.toObject();
+    restUser.uid = _id; // Esta linea cambia visualmente el '_id' por 'uid'
     return restUser;
 };
 

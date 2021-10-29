@@ -78,7 +78,7 @@ const usersDelete = async(req = request, res = response) => {
     // Cambiar el status para que no aparezca activo
     const user = await User.findByIdAndUpdate(id, { status: false });
 
-    res.status(200).json(user);
+    res.status(200).json({ user });
 };
 
 module.exports = {

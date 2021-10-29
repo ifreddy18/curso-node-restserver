@@ -9,7 +9,12 @@ const {
 } = require('../helpers/db-validators');
 
 // Middlewares
-const { validateInputs } = require('../middlewares/validate-inputs');
+const {
+    validateJWT,
+    isAdmin,
+    hasRole,
+    validateInputs
+} = require('../middlewares');
 
 // Controllers
 const { 
@@ -38,11 +43,15 @@ router.post('/', [
 router.put('/:id', [
     check('id', 'This is not a valid ID').isMongoId(),
     check('id').custom( userExistById ),
+    // TODO: Cambiar condicion de role para que no sea obligatorio mandarlo
     check('role').custom( isRoleValid ),
     validateInputs
 ], usersPut );
 
 router.delete('/:id', [
+    validateJWT,
+    // isAdmin,
+    hasRole('USER_ROLE', 'SELLER_ROLE'),
     check('id', 'This is not a valid ID').isMongoId(),
     check('id').custom( userExistById ),
     validateInputs
